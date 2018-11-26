@@ -6,12 +6,12 @@ int led_down;
 #define STEP 5
 
 void setup() {
-  // initialize digital pin LED_BUILTIN as an output.
-  pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(11,OUTPUT);
+  for(int i=0, i<=3; i++) {
+    pinMode(pins[i], OUTPUT);
+  }
 }
 
-void light_up(int pin, int step) {
+void LightUp(int pin, int step) {
   for(int i=0; i<=255; i++)
     {
     analogWrite(pin,i);
@@ -19,7 +19,7 @@ void light_up(int pin, int step) {
     }
 }
 
-void light_down(int pin, int step) {
+void LightDown(int pin, int step) {
   for(int i=255; i>=0; i--)
     {
     analogWrite(pin,i);
@@ -35,6 +35,13 @@ void LightUpDown(int pin_up, int pin_down, int step) {
 }
 }
 
+void LightOff(int pin) {
+  digitalWrite(pin,0);
+}
+
+void LightOn(int pin) {
+  digitalWrite(pin,1);
+}
 
 
 void loop() {
@@ -49,8 +56,18 @@ for(int j =0; j<=3; j++) {
   led_up = pins[j];
   led_down = pins[j-1];
  }
-  LightUpDown(led_up, led_down,STEP);
+  LightUpDown(led_up, led_down, STEP);
  
 }
-  
+
+for(int j=0; j<=3; j++) {
+ LightOff(pins[j]);
+}
+
+
+for(int j=0; j<=3; j++) {
+ LightUp(pins[j]);
+}
+
+
 }
