@@ -1,7 +1,11 @@
 
 int pins[] = {6,9,10,11};
+int ButtonPin = 4;
+int ButtonState = 0;
 int led_up;
 int led_down;
+int programm = 0;
+int programm_max = 2;
 
 #define STEP 5
 
@@ -9,7 +13,8 @@ void setup() {
   for(int i=0; i<=3; i++) {
     pinMode(pins[i], OUTPUT);
   }
-}
+  pinMode(ButtonPin, INPUT);
+} 
 
 void LightUp(int pin, int step) {
   for(int i=0; i<=255; i++)
@@ -57,7 +62,22 @@ void LightOnAll() {
 
 void loop() {
 
-/* 
+ButtonState = digitalRead(ButtonPin);
+if(ButtonState == HIGH) {
+ for(int j=0; j<5; j++) {
+  LightOnAll();
+  delay(20);
+  LightOffAll();
+  delay(20); 
+ }
+  
+ programm++ ;
+ if(programm > programm_max) { programm = 0 ; }
+ delay(2000);
+}
+
+switch(programm) {
+case 0:
 for(int j =0; j<=3; j++) { 
  
  if(j == 0) {
@@ -71,13 +91,12 @@ for(int j =0; j<=3; j++) {
   LightUpDown(led_up, led_down, STEP);
  
 }
-*/
-
+break;
+case 1:
 /* программа 1 - все по очереди плавно зажечь, 
    все по очереди плавно погасить,
    задержка 3 секунды
 */
-/*
 for(int j=0; j<=3; j++) {
  LightUp(pins[j], STEP);
 }
@@ -87,9 +106,10 @@ for(int j=0; j<=3; j++) {
 }
 
 delay(3000);
-*/
-/* конец программы 1 */
 
+/* конец программы 1 */
+break;
+case 2:
 /* программа 2 - бегущие огни  */
 for(int j=0; j<=3; j++) {
   LightOn(pins[j]);
@@ -98,4 +118,6 @@ for(int j=0; j<=3; j++) {
 }
 
 /* конец программы 2 */
+break;
+}
 }
