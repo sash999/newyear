@@ -6,7 +6,7 @@ int led_down;
 #define STEP 5
 
 void setup() {
-  for(int i=0, i<=3; i++) {
+  for(int i=0; i<=3; i++) {
     pinMode(pins[i], OUTPUT);
   }
 }
@@ -39,13 +39,25 @@ void LightOff(int pin) {
   digitalWrite(pin,0);
 }
 
+void LightOffAll() {
+  for(int j=0; j<=3; j++) {
+  LightOff(pins[j]);
+ }
+}
+
 void LightOn(int pin) {
   digitalWrite(pin,1);
 }
 
+void LightOnAll() {
+  for(int j=0; j<=3; j++) {
+  LightOn(pins[j]);
+ }
+}
 
 void loop() {
- 
+
+/* 
 for(int j =0; j<=3; j++) { 
  
  if(j == 0) {
@@ -59,15 +71,31 @@ for(int j =0; j<=3; j++) {
   LightUpDown(led_up, led_down, STEP);
  
 }
+*/
 
+/* программа 1 - все по очереди плавно зажечь, 
+   все по очереди плавно погасить,
+   задержка 3 секунды
+*/
+/*
 for(int j=0; j<=3; j++) {
- LightOff(pins[j]);
+ LightUp(pins[j], STEP);
 }
 
-
 for(int j=0; j<=3; j++) {
- LightUp(pins[j]);
+ LightDown(pins[j], STEP);
 }
 
+delay(3000);
+*/
+/* конец программы 1 */
 
+/* программа 2 - бегущие огни  */
+for(int j=0; j<=3; j++) {
+  LightOn(pins[j]);
+  delay(300);
+  LightOffAll();
+}
+
+/* конец программы 2 */
 }
