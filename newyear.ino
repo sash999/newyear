@@ -14,13 +14,13 @@ int ButtonState = 0;
 int led_up;
 int led_down;
 volatile int programm = 0;
-volatile int programm_max = 6;
+volatile int programm_max = 7;
 volatile bool stop_now = false;
 
 #define STEP 5
 
 void setup() {
-  Serial.begin(9600);
+  //Serial.begin(9600);
   for(int i=0; i<=3; i++) {
     pinMode(pins[i], OUTPUT);
   }
@@ -40,7 +40,7 @@ void changeProgramm() {
         stop_now = true;
         programm++ ;
         if(programm > programm_max) { programm = 0 ; }
-        Serial.println(programm, millis_prev);
+ //       Serial.println(programm, millis_prev);
         millis_prev = millis();
      }
 }
@@ -152,9 +152,17 @@ void OneColor(int line) {
   if(StopNow()) return; 
   LightOn(pins[line]);
 }
- 
+
+void ColorSet(bool colorset[4]) {
+   if(StopNow()) return;
+   if(colorset[0]) LightOn(pins[0]); 
+   if(colorset[1]) LightOn(pins[1]); 
+   if(colorset[2]) LightOn(pins[2]); 
+   if(colorset[3]) LightOn(pins[3]); 
+}
 
 void loop() {
+
     switch(programm) {
         case 0:
             Programm0();
@@ -177,6 +185,11 @@ void loop() {
         case 6:
             OneColor(3);
             break;    
+        case 7:
+            bool colors[] = {0,0,1,1} ;
+            ColorSet(colors);
+            break;    
+      
         default:
             LightOffAll();
             break;
