@@ -36,7 +36,7 @@ void setup() {
 
 void changeProgramm() {
  static unsigned long millis_prev;
-      if(millis()-100 > millis_prev) {
+      if(millis()-200 > millis_prev) {
         stop_now = true;
         programm++ ;
         if(programm > programm_max) { programm = 0 ; }
