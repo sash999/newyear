@@ -9,22 +9,20 @@ int pins[] = {6,9,10,11};
  * 10-зеленый
  * 11 -красный
  */
-int ButtonPin = 4;
-int ButtonState = 0;
 int led_up;
 int led_down;
+
 volatile int programm = 0;
 volatile int programm_max = 7;
 volatile bool stop_now = false;
 
-#define STEP 5
+#define STEP 5 // задержка в миллиссекундах при повышении/понижении яркости ( полный
+               // цикл - 255 итераций, то есть при 5мс - 1.275 сек)
 
 void setup() {
-  //Serial.begin(9600);
   for(int i=0; i<=3; i++) {
     pinMode(pins[i], OUTPUT);
   }
-  pinMode(ButtonPin, INPUT);
 
   // Устанавливаем прерывание
   // Функция changeProgramm вызовется тогда, когда
@@ -36,11 +34,12 @@ void setup() {
 
 void changeProgramm() {
  static unsigned long millis_prev;
-      if(millis()-200 > millis_prev) {
+      if(millis()-200 > millis_prev) { // программная борьба с дребезгом контактов
+                                       // проверяем, что с момента прошлого прерывания
+                                       // прошло больше 200 мс
         stop_now = true;
         programm++ ;
         if(programm > programm_max) { programm = 0 ; }
- //       Serial.println(programm, millis_prev);
         millis_prev = millis();
      }
 }
