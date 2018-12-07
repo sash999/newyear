@@ -13,10 +13,10 @@ int led_up;
 int led_down;
 
 volatile int programm = 0;
-volatile int programm_max = 7;
+volatile int programm_max = 17;
 volatile bool stop_now = false;
 
-#define STEP 5 // задержка в миллиссекундах при повышении/понижении яркости ( полный
+#define STEP 10 // задержка в миллиссекундах при повышении/понижении яркости ( полный
                // цикл - 255 итераций, то есть при 5мс - 1.275 сек)
 
 void setup() {
@@ -53,6 +53,17 @@ void LightUp(int pin, int step) {
     }
 }
 
+void LightUpAll(int step) {
+  for(int i=0; i<=255; i++)
+    {
+    for(int j=0; j<=3; j++) {  
+    analogWrite(pins[j],i);
+    }
+    delay(step);
+    }
+}
+
+
 void LightDown(int pin, int step) {
   for(int i=255; i>=0; i--)
     {
@@ -60,6 +71,17 @@ void LightDown(int pin, int step) {
     delay(step);
     }
 }    
+
+void LightDownAll(int step) {
+  for(int i=255; i>=0; i--)
+    {
+    for(int j=0; j<=3; j++) {  
+    analogWrite(pins[j],i);
+    }
+    delay(step);
+    }
+}
+
 
 void LightUpDown(int pin_up, int pin_down, int step) {
   for(int i=0; i<=255; i++) {
@@ -147,17 +169,32 @@ for(int j=0; j<=3; j++) {
 }
 }
 
+void Programm3() {
+  /* программа 3 - все плавно зажечь, 
+   все плавно погасить,
+   задержка 3 секунды
+*/
+
+ if(StopNow()) return; 
+ LightUpAll(STEP);
+ if(StopNow()) return; 
+ LightDownAll(STEP);
+
+delay(3000);
+}
+
 void OneColor(int line) {
   if(StopNow()) return; 
   LightOn(pins[line]);
 }
 
-void ColorSet(bool colorset[4]) {
+void ColorSet(bool blue, bool yellow, bool green, bool red) {
+   LightOffAll();
    if(StopNow()) return;
-   if(colorset[0]) LightOn(pins[0]); 
-   if(colorset[1]) LightOn(pins[1]); 
-   if(colorset[2]) LightOn(pins[2]); 
-   if(colorset[3]) LightOn(pins[3]); 
+   if(blue)   LightOn(pins[0]); 
+   if(yellow) LightOn(pins[1]); 
+   if(green)  LightOn(pins[2]); 
+   if(red)    LightOn(pins[3]); 
 }
 
 void loop() {
@@ -173,22 +210,50 @@ void loop() {
             Programm2();
             break;
         case 3:
-            OneColor(0);
+            Programm3();
             break;    
         case 4:
-            OneColor(1);
+            OneColor(0);
             break;    
         case 5:
-            OneColor(2);
+            OneColor(1);
             break;    
         case 6:
-            OneColor(3);
-            break;    
+            OneColor(2);
+            break;
         case 7:
-            bool colors[] = {0,0,1,1} ;
-            ColorSet(colors);
-            break;    
-      
+            OneColor(3);
+            break;        
+        case 8:
+            ColorSet(0,0,1,1);
+            break;   
+        case 9:
+            ColorSet(0,1,0,1);
+            break;     
+        case 10:
+            ColorSet(0,1,1,0);
+            break;     
+        case 11:
+            ColorSet(0,1,1,1);
+            break;     
+        case 12:
+            ColorSet(1,0,0,1);
+            break;         
+        case 13:
+            ColorSet(1,0,1,0);
+            break; 
+        case 14:
+            ColorSet(1,0,1,1);
+            break;         
+        case 15:
+            ColorSet(1,1,0,0);
+            break;     
+        case 16:
+            ColorSet(1,1,1,0);
+            break;         
+        case 17:
+            ColorSet(1,1,1,1);
+            break;     
         default:
             LightOffAll();
             break;
