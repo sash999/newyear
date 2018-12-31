@@ -44,12 +44,18 @@ void changeProgramm() {
      }
 }
 
+int adjust(int i) {
+  if ( i < 50 ) {
+    return 50 - i;
+  }
+  return 0;
+}
 
 void LightUp(int pin, int step) {
   for(int i=0; i<=255; i++)
     {
     analogWrite(pin,i);
-    delay(step);
+    delay(step + adjust(i));
     }
 }
 
@@ -59,7 +65,7 @@ void LightUpAll(int step) {
     for(int j=0; j<=3; j++) {  
     analogWrite(pins[j],i);
     }
-    delay(step);
+    delay(step + adjust(i));
     }
 }
 
@@ -68,7 +74,7 @@ void LightDown(int pin, int step) {
   for(int i=255; i>=0; i--)
     {
     analogWrite(pin,i);
-    delay(step);
+    delay(step + adjust(i));
     }
 }    
 
@@ -78,7 +84,7 @@ void LightDownAll(int step) {
     for(int j=0; j<=3; j++) {  
     analogWrite(pins[j],i);
     }
-    delay(step);
+    delay(step + adjust(i));
     }
 }
 
@@ -87,7 +93,7 @@ void LightUpDown(int pin_up, int pin_down, int step) {
   for(int i=0; i<=255; i++) {
   analogWrite(pin_up,i);
   analogWrite(pin_down, 255-i);
-  delay(step);
+  delay(step + adjust(i));
 }
 }
 
@@ -144,7 +150,7 @@ if(StopNow()) return;
 void Programm1() {
   /* программа 1 - все по очереди плавно зажечь, 
    все по очереди плавно погасить,
-   задержка 3 секунды
+   задержка 1 секундa
 */
 for(int j=0; j<=3; j++) {
  if(StopNow()) return; 
@@ -156,7 +162,7 @@ for(int j=0; j<=3; j++) {
  LightDown(pins[j], STEP);
 }
 
-delay(3000);
+delay(1000);
 }
 
 void Programm2() {
@@ -172,7 +178,7 @@ for(int j=0; j<=3; j++) {
 void Programm3() {
   /* программа 3 - все плавно зажечь, 
    все плавно погасить,
-   задержка 3 секунды
+   задержка 1 секундa
 */
 
  if(StopNow()) return; 
@@ -180,7 +186,7 @@ void Programm3() {
  if(StopNow()) return; 
  LightDownAll(STEP);
 
-delay(3000);
+delay(1000);
 }
 
 void OneColor(int line) {
